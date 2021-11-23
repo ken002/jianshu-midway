@@ -1,14 +1,13 @@
 import { Provide } from '@midwayjs/decorator';
-import { IUserOptions } from '../interface';
-
+import { InjectEntityModel } from '@midwayjs/orm';
+import { Repository } from 'typeorm';
+import User from '../entity/user';
 @Provide()
 export class UserService {
-  async getUser(options: IUserOptions) {
-    return {
-      uid: options.uid,
-      username: 'mockedName',
-      phone: '12345678901',
-      email: 'xxx.xxx@xxx.com',
-    };
+  @InjectEntityModel(User)
+  userModel: Repository<User>;
+
+  async getUserById(id: number): Promise<User> {
+    return await this.userModel.findOne(id);
   }
 }
